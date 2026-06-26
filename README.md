@@ -4,13 +4,13 @@ Animated TENOTO wave logo, hosted as a static page for embedding in Notion (or a
 
 - **`tenoto-notion-embed.html`** — iframe-tuned embed (`overflow:hidden`, scales to fill the block). **Use this one for Notion.**
 - **`index.html`** — the slim, self-contained embed widget. Centers itself in whatever container it's given.
-- **`playground.html`** — the full editor with controls for tuning the animation.
+- **`tenoto-wave.html`** — the interactive editor with controls for tuning the animation parameters.
 
 ## Live
 
 - Notion embed: https://frasercole.github.io/tenoto-embed/tenoto-notion-embed.html
 - Embed (centered): https://frasercole.github.io/tenoto-embed/
-- Playground: https://frasercole.github.io/tenoto-embed/playground.html
+- Interactive editor: https://frasercole.github.io/tenoto-embed/tenoto-wave.html
 
 ## Embedding in Notion
 
