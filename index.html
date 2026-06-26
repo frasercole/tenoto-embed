@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TENOTO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background-color:#0a0a0a;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;}
+.g{display:grid;}
+.c{border-radius:1px;will-change:transform;}
+.c.e{visibility:hidden;}
+.em{display:block;text-align:center;margin-top:20px;font-family:monospace;font-size:13px;letter-spacing:2px;color:#555;text-decoration:none;}.em:hover{color:#cc3300;}
+@media(max-width:600px){.em{margin-top:14px;font-size:11px;}}
+</style>
+</head>
+<body>
+<div>
+<div class="g" id="g"></div>
+<a href="mailto:info@tenoto.com" class="em">info@tenoto.com</a>
+</div>
+<script>
+const L=[[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],[[1,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,0,0],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,1]],[[1,0,0,0,1],[1,1,0,0,1],[1,0,1,0,1],[1,0,0,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]]];
+const lc=L.length,R=7,C=5;
+const g=document.getElementById('g');
+let fc=[],ms=0;
+
+function isMobile(){return window.innerWidth<=600;}
+function build(){
+  const m=isMobile();
+  const s=m?8:18, gp=m?2:4, p=s+gp;
+  g.innerHTML='';g.style.gap=gp+'px';
+  const cols=[];
+  for(let i=0;i<lc;i++){for(let c=0;c<C;c++)cols.push(s+'px');if(i<lc-1)cols.push(s+'px');}
+  g.style.gridTemplateColumns=cols.join(' ');
+  g.style.gridTemplateRows='repeat('+R+','+s+'px)';
+  const sm={};let si=0;
+  for(let li=0;li<lc;li++)for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    if(L[li][r][c])sm[li+'-'+r+'-'+c]=si++;
+  }
+  ms=si;fc=[];
+  for(let r=0;r<R;r++){for(let li=0;li<lc;li++){for(let c=0;c<C;c++){
+    const d=document.createElement('div');
+    const f=L[li][r][c];
+    d.className='c'+(f?'':' e');
+    d.style.width=s+'px';d.style.height=s+'px';
+    if(f){d.dataset.s=sm[li+'-'+r+'-'+c];fc.push(d);}
+    g.appendChild(d);
+  }if(li<lc-1){const sp=document.createElement('div');sp.className='c e';sp.style.width=s+'px';sp.style.height=s+'px';g.appendChild(sp);}}}
+  
+  requestAnimationFrame(function(){
+    const cv=document.createElement('canvas');cv.width=p;cv.height=p;
+    const x=cv.getContext('2d');
+    x.fillStyle='rgba(204,51,0,0.66)';
+    if(x.roundRect){x.beginPath();x.roundRect(0,0,s,s,1);x.fill();}
+    else x.fillRect(0,0,s,s);
+    const gr=g.getBoundingClientRect();
+    const bx=gr.left%p,by=gr.top%p;
+    document.body.style.backgroundImage='url('+cv.toDataURL()+')';
+    document.body.style.backgroundRepeat='repeat';
+    document.body.style.backgroundPosition=bx+'px '+by+'px';
+    document.body.style.backgroundSize=p+'px '+p+'px';
+  });
+}
+build();
+let wm=isMobile();
+window.addEventListener('resize',function(){const nm=isMobile();if(nm!==wm){wm=nm;build();}});
+
+const sp=1,ww=8,ps=1.5;
+const bc='#cc3300',tc='#ff9900';
+const[r1,g1,b1]=[parseInt(bc.slice(1,3),16),parseInt(bc.slice(3,5),16),parseInt(bc.slice(5,7),16)];
+const[r2,g2,b2]=[parseInt(tc.slice(1,3),16),parseInt(tc.slice(3,5),16),parseInt(tc.slice(5,7),16)];
+function lp(t){return'rgb('+Math.round(r1+(r2-r1)*t)+','+Math.round(g1+(g2-g1)*t)+','+Math.round(b1+(b2-b1)*t)+')';}
+let t=0,lt=null;
+function a(ts){if(!lt)lt=ts;t+=(ts-lt)/1000*sp;lt=ts;
+const cl=ms+ww;if(cl===0){requestAnimationFrame(a);return;}
+const wp=(t*15)%cl;
+fc.forEach(e=>{const s=+e.dataset.s;
+let d=Math.abs(s-wp),d2=Math.abs(s-(wp-cl)),d3=Math.abs(s-(wp+cl));
+d=Math.min(d,d2,d3);
+let sc=1,sm=0;if(d<ww){const t2=1-d/ww;sm=t2*t2*(3-2*t2);sc=1+(ps-1)*sm;}
+e.style.transform='scale('+sc+')';e.style.backgroundColor=lp(sm);});
+requestAnimationFrame(a);}
+requestAnimationFrame(a);
+</script>
+</body>
+</html>
